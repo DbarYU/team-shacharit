@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     let query = adminDb.collection(COLLECTIONS.ATTENDANCE);
 
     if (date) {
-      query = query.where('date', '==', date);
+      query = query.where('date', '==', date) as any;
     }
 
     const attendanceSnapshot = await query

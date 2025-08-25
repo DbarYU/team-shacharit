@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
@@ -26,7 +26,7 @@ export default function AttendancePage() {
   const [selectedDate, setSelectedDate] = useState(getCurrentDateEST());
   const [totalCount, setTotalCount] = useState(0);
 
-  const fetchAttendance = async (date?: string) => {
+  const fetchAttendance = useCallback(async (date?: string) => {
     try {
       setLoading(true);
       if (!user) return;
@@ -52,13 +52,13 @@ export default function AttendancePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     if (user) {
       fetchAttendance(selectedDate);
     }
-  }, [user, selectedDate]);
+  }, [user, selectedDate, fetchAttendance]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(e.target.value);
