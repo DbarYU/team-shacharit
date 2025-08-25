@@ -57,13 +57,38 @@ export default function HomePage() {
             </h2>
             
             {currentOrder ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h3 className="font-medium text-green-800 mb-2">✅ Your order is confirmed for tomorrow!</h3>
-                <div className="text-green-700">
+              <div className={`border rounded-lg p-4 ${
+                currentOrder.status === 'confirmed'
+                  ? 'bg-green-50 border-green-200'
+                  : 'bg-yellow-50 border-yellow-200'
+              }`}>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className={`font-medium ${
+                    currentOrder.status === 'confirmed'
+                      ? 'text-green-800'
+                      : 'text-yellow-800'
+                  }`}>
+                    {currentOrder.status === 'confirmed'
+                      ? '✅ Your order is confirmed for tomorrow!'
+                      : '⏳ Your order is pending for tomorrow'
+                    }
+                  </h3>
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                    currentOrder.status === 'confirmed'
+                      ? 'bg-green-200 text-green-800'
+                      : 'bg-yellow-200 text-yellow-800'
+                  }`}>
+                    {currentOrder.status.toUpperCase()}
+                  </span>
+                </div>
+                <div className={
+                  currentOrder.status === 'confirmed'
+                    ? 'text-green-700'
+                    : 'text-yellow-700'
+                }>
                   <p><strong>Bagel:</strong> {currentOrder.bagelType.replace('_', ' ').toUpperCase()}</p>
                   <p><strong>With Potatoes:</strong> {currentOrder.withPotatoes ? 'Yes' : 'No'}</p>
                   <p><strong>With Cheese:</strong> {currentOrder.withCheese ? 'Yes' : 'No'}</p>
-
                 </div>
               </div>
             ) : (
