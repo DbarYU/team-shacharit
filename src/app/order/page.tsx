@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { DEFAULT_BAGEL_TYPES, DailyOrder } from '@/lib/schemas';
+import { DEFAULT_BAGEL_TYPES, CHEESE_OPTIONS, DailyOrder } from '@/lib/schemas';
 import { getOrderTargetDateEST, areOrdersAllowed } from '@/lib/utils/dateUtils';
 
 export default function OrderPage() {
@@ -14,7 +14,7 @@ export default function OrderPage() {
   const [formData, setFormData] = useState({
     bagelType: 'plain',
     withPotatoes: false,
-    withCheese: false,
+    cheeseType: 'no_cheese',
     dietaryNotes: ''
   });
   
@@ -168,15 +168,22 @@ export default function OrderPage() {
                   <span className="text-gray-700">With Potatoes</span>
                 </label>
 
-                <label className="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    checked={formData.withCheese}
-                    onChange={(e) => setFormData({ ...formData, withCheese: e.target.checked })}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="text-gray-700">With Cheese</span>
-                </label>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Cheese Options
+                  </label>
+                  <select
+                    value={formData.cheeseType}
+                    onChange={(e) => setFormData({ ...formData, cheeseType: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    {CHEESE_OPTIONS.map(option => (
+                      <option key={option} value={option}>
+                        {option.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
 

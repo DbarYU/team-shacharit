@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
-import { COLLECTIONS, DEFAULT_BAGEL_TYPES, ORDER_STATUS } from '@/lib/schemas';
+import { COLLECTIONS, DEFAULT_BAGEL_TYPES, ORDER_STATUS, CHEESE_OPTIONS } from '@/lib/schemas';
 import { verifyToken } from '@/lib/middleware/auth';
 import { getOrderTargetDateEST, areOrdersAllowed } from '@/lib/utils/dateUtils';
 
@@ -16,9 +16,17 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!orderData.bagelType || !DEFAULT_BAGEL_TYPES.includes(orderData.bagelType)) {
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Invalid bagel type' 
+      return NextResponse.json({
+        success: false,
+        message: 'Invalid bagel type'
+      }, { status: 400 });
+    }
+
+    // Validate cheese type
+    if (!orderData.cheeseType || !CHEESE_OPTIONS.includes(orderData.cheeseType)) {
+      return NextResponse.json({
+        success: false,
+        message: 'Invalid cheese type'
       }, { status: 400 });
     }
 
@@ -52,7 +60,7 @@ export async function POST(request: NextRequest) {
       date: targetDate,
       bagelType: orderData.bagelType,
       withPotatoes: orderData.withPotatoes || false,
-      withCheese: orderData.withCheese || false,
+      cheeseType: orderData.cheeseType,
       dietaryNotes: orderData.dietaryNotes || '',
       orderTimestamp: new Date(),
       status: ORDER_STATUS.PENDING

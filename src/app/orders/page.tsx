@@ -135,21 +135,12 @@ export default function OrdersPage() {
     const targetDate = getOrderTargetDateEST('EEEE, MMMM d, yyyy');
     let exportText = `BREAKFAST ORDERS - ${targetDate}\n`;
     exportText += `========================================\n\n`;
-    exportText += `Total Orders: ${orders.length}\n\n`;
 
     orders.forEach((order, index) => {
-      const orderTime = convertFirestoreTimestamp(order.orderTimestamp).toLocaleTimeString('en-US', {
-        timeZone: 'America/New_York',
-        hour: 'numeric',
-        minute: '2-digit'
-      });
-
       exportText += `${index + 1}. ${order.user.displayName}\n`;
-      exportText += `   Ordered at: ${orderTime} EST\n`;
       exportText += `   Bagel: ${order.bagelType.replace('_', ' ').toUpperCase()}\n`;
       exportText += `   With Potatoes: ${order.withPotatoes ? 'YES' : 'NO'}\n`;
-      exportText += `   With Cheese: ${order.withCheese ? 'YES' : 'NO'}\n`;
-      exportText += `   Status: ${order.status.toUpperCase()}\n`;
+      exportText += `   Cheese: ${order.cheeseType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}\n`;
 
       exportText += `\n`;
     });

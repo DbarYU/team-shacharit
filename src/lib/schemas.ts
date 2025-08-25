@@ -27,7 +27,7 @@ export const DailyOrderSchema = {
   date: 'string', // Format: YYYY-MM-DD (EST)
   bagelType: 'string', // One of DEFAULT_BAGEL_TYPES
   withPotatoes: 'boolean',
-  withCheese: 'boolean',
+  cheeseType: 'string', // One of CHEESE_OPTIONS
   dietaryNotes: 'string',
   orderTimestamp: 'timestamp',
   status: 'string' // One of ORDER_STATUS values
@@ -76,6 +76,12 @@ export const DEFAULT_BAGEL_TYPES = [
   'no_bagel'
 ];
 
+export const CHEESE_OPTIONS = [
+  'no_cheese',
+  'grilled_cheese',
+  'cream_cheese'
+];
+
 export const COLLECTIONS = {
   USERS: 'users',
   DAILY_ORDERS: 'dailyOrders',
@@ -111,7 +117,7 @@ export type DailyOrder = {
   date: string;
   bagelType: string;
   withPotatoes: boolean;
-  withCheese: boolean;
+  cheeseType: string; // One of CHEESE_OPTIONS
   dietaryNotes: string;
   orderTimestamp: FirestoreTimestamp | Date;
   status: string;
