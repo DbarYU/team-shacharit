@@ -7,12 +7,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { formatCurrentDateEST } from '@/lib/utils/dateUtils';
 import { ArrowLeft, QrCode, RefreshCw, Calendar, AlertTriangle } from 'lucide-react';
+import { FirestoreTimestamp } from '@/lib/schemas';
 
 interface QRCodeData {
   id: string;
   code: string;
   date: string;
-  expiresAt: any;
+  expiresAt: FirestoreTimestamp | Date;
 }
 
 export default function QRCodePage() {
@@ -195,7 +196,7 @@ export default function QRCodePage() {
               <div className="bg-white rounded-lg shadow-lg p-8">
                 <div className="text-center mb-6">
                   <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                    Today's QR Code
+                    Today&apos;s QR Code
                   </h2>
                   <p className="text-gray-600">
                     Have attendees scan this code to check in
@@ -205,7 +206,8 @@ export default function QRCodePage() {
                 {/* QR Code Display */}
                 <div className="bg-gray-50 rounded-lg p-6 mb-6">
                   <div className="flex justify-center mb-4">
-                    <img 
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src={generateQRCodeDataURL(getFullScanURL())}
                       alt="Daily QR Code"
                       className="border-4 border-white shadow-lg rounded-lg"
@@ -266,7 +268,7 @@ export default function QRCodePage() {
                   No QR Code Generated Yet
                 </h2>
                 <p className="text-gray-600 mb-6">
-                  Generate today's QR code for attendance tracking
+                  Generate today&apos;s QR code for attendance tracking
                 </p>
                 
                 <button
@@ -289,7 +291,7 @@ export default function QRCodePage() {
                 <div className="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2">
                   <span className="text-blue-600 font-bold">1</span>
                 </div>
-                <p className="text-gray-600">Generate or display today's QR code</p>
+                <p className="text-gray-600">Generate or display today&apos;s QR code</p>
               </div>
               <div className="text-center">
                 <div className="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center mx-auto mb-2">

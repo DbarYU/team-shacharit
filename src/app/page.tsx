@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { getOrderTargetDateEST } from '@/lib/utils/dateUtils';
-import { Clock, QrCode, Users, Coffee } from 'lucide-react';
+import { QrCode, Users, Coffee } from 'lucide-react';
 import { DailyOrder } from '@/lib/schemas';
 
 export default function HomePage() {

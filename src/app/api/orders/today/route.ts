@@ -5,8 +5,13 @@ import { verifyToken } from '@/lib/middleware/auth';
 import { getOrderTargetDateEST, convertFirestoreTimestamp } from '@/lib/utils/dateUtils';
 
 // Helper function to convert Firestore document data
-const convertDocumentData = (doc: any) => {
+const convertDocumentData = (doc: FirebaseFirestore.DocumentSnapshot) => {
   const data = doc.data();
+  if (!data) {
+    return {
+      id: doc.id
+    };
+  }
   // Convert any Firestore timestamps to JavaScript Dates
   if (data.orderTimestamp) {
     data.orderTimestamp = convertFirestoreTimestamp(data.orderTimestamp);
@@ -60,7 +65,7 @@ export async function GET(request: NextRequest) {
     // Create summary
     const summary = {
       totalOrders: enhancedOrders.length,
-      bagelBreakdown: {},
+      bagelBreakdown: {} as Record<string, number>,
       withPotatoes: 0,
       withCheese: 0
     };

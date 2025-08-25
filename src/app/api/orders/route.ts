@@ -123,7 +123,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Check if user is admin
-    if (!user.isAdmin) {
+    if (!('isAdmin' in user) || !user.isAdmin || user.isAdmin !== true) {
       return NextResponse.json({ success: false, message: 'Admin privileges required' }, { status: 403 });
     }
 
@@ -158,7 +158,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     // Check if user is admin
-    if (!user.isAdmin) {
+    if (!('isAdmin' in user) || !user.isAdmin || user.isAdmin !== true) {
       return NextResponse.json({ success: false, message: 'Admin privileges required' }, { status: 403 });
     }
 

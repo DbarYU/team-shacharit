@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
-import { COLLECTIONS } from '@/lib/schemas';
+import { COLLECTIONS, User } from '@/lib/schemas';
 import { verifyToken } from '@/lib/middleware/auth';
 
 export async function GET(request: NextRequest) {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
 
-    const userData = user as any; // Type assertion to handle the union type
+    const userData = user as Partial<User>; // Type assertion to handle the union type
     return NextResponse.json({
       success: true,
       user: {
@@ -48,7 +48,7 @@ export async function PUT(request: NextRequest) {
 
     await adminDb.collection(COLLECTIONS.USERS).doc(user.uid).update(updatedData);
 
-    const userData = { ...user, ...updatedData } as any; // Type assertion to handle the union type
+    const userData = { ...user, ...updatedData } as Partial<User>; // Type assertion to handle the union type
 
     return NextResponse.json({
       success: true,

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,7 +8,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { formatCurrentDateEST } from '@/lib/utils/dateUtils';
 import { ArrowLeft, QrCode, CheckCircle, AlertCircle, Clock } from 'lucide-react';
 
-export default function ScanPage() {
+function ScanPageContent() {
   const { user, userProfile } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -20,15 +20,7 @@ export default function ScanPage() {
   } | null>(null);
   const [manualCode, setManualCode] = useState('');
 
-  // Check if there's a QR code in the URL params (from scanning)
-  useEffect(() => {
-    const codeFromUrl = searchParams.get('code');
-    if (codeFromUrl && user) {
-      handleScan(codeFromUrl);
-    }
-  }, [searchParams, user]);
-
-  const handleScan = async (qrCode: string) => {
+  const handleScan = useCallback(async (qrCode: string) => {
     if (!user) return;
     
     setLoading(true);
@@ -67,7 +59,15 @@ export default function ScanPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  // Check if there's a QR code in the URL params (from scanning)
+  useEffect(() => {
+    const codeFromUrl = searchParams.get('code');
+    if (codeFromUrl && user) {
+      handleScan(codeFromUrl);
+    }
+  }, [searchParams, user, handleScan]);
 
   const handleManualSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -196,12 +196,12 @@ export default function ScanPage() {
                 </form>
 
                 <div className="mt-6 text-center">
-                  <p className="text-sm text-gray-500 mb-2">Or use your phone's camera:</p>
+                  <p className="text-sm text-gray-500 mb-2">Or use your phone&apos;s camera:</p>
                   <button
                     onClick={() => {
                       // This would typically open the camera scanner
                       // For now, we'll show instructions
-                      alert('To scan with camera:\n1. Open your phone\'s camera app\n2. Point at the QR code\n3. Tap the link that appears\n4. You\'ll be redirected here automatically');
+                      alert('To scan with camera:\n1. Open your phone&apos;s camera app\n2. Point at the QR code\n3. Tap the link that appears\n4. You&apos;ll be redirected here automatically');
                     }}
                     className="text-blue-600 hover:text-blue-800 transition-colors text-sm font-medium"
                   >
@@ -239,5 +239,22 @@ export default function ScanPage() {
         </div>
       </div>
     </ProtectedRoute>
+  );
+}
+
+export default function ScanPage() {
+  return (
+    <Suspense fallback={
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading...</p>
+          </div>
+        </div>
+      </ProtectedRoute>
+    }>
+      <ScanPageContent />
+    </Suspense>
   );
 }

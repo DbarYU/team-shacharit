@@ -1,5 +1,12 @@
 // Database schema definitions
 
+// Firestore timestamp type
+export interface FirestoreTimestamp {
+  seconds: number;
+  nanoseconds: number;
+  toDate(): Date;
+}
+
 export const UserSchema = {
   uid: 'string', // Firebase Auth UID
   email: 'string',
@@ -96,9 +103,9 @@ export type User = {
   phoneNumber?: string;
   dietaryRestrictions: string[];
   isAdmin?: boolean;
-  createdAt: any;
-  updatedAt: any;
-  lastLoginAt: any;
+  createdAt: FirestoreTimestamp | Date;
+  updatedAt: FirestoreTimestamp | Date;
+  lastLoginAt: FirestoreTimestamp | Date;
 };
 
 export type DailyOrder = {
@@ -109,7 +116,7 @@ export type DailyOrder = {
   withPotatoes: boolean;
   withCheese: boolean;
   dietaryNotes: string;
-  orderTimestamp: any;
+  orderTimestamp: FirestoreTimestamp | Date;
   status: string;
 };
 
@@ -117,7 +124,7 @@ export type Attendance = {
   id: string;
   userId: string;
   date: string;
-  checkInTime: any;
+  checkInTime: FirestoreTimestamp | Date;
   qrCodeId: string;
 };
 
@@ -125,8 +132,8 @@ export type QRCode = {
   id: string;
   date: string;
   code: string;
-  createdAt: any;
+  createdAt: FirestoreTimestamp | Date;
   createdBy: string;
   isActive: boolean;
-  expiresAt: any;
+  expiresAt: FirestoreTimestamp | Date;
 };
