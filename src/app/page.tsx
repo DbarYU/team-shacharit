@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { getOrderTargetDateEST } from '@/lib/utils/dateUtils';
-import { QrCode, Users, Coffee } from 'lucide-react';
+import { QrCode, Users, Coffee, BarChart3 } from 'lucide-react';
 import { DailyOrder } from '@/lib/schemas';
 
 export default function HomePage() {
@@ -75,7 +75,7 @@ export default function HomePage() {
           </div>
 
           {/* Quick Actions */}
-          <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 ${userProfile?.isAdmin ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
+          <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 ${userProfile?.isAdmin ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`}>
             <Link href="/order" className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow block">
               <div className="flex items-center space-x-4">
                 <Coffee className="h-8 w-8 text-blue-600" />
@@ -102,6 +102,16 @@ export default function HomePage() {
                 <div>
                   <h3 className="font-semibold text-gray-900">All Orders</h3>
                   <p className="text-gray-600 text-sm">See everyone&apos;s orders</p>
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/attendance" className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow block">
+              <div className="flex items-center space-x-4">
+                <BarChart3 className="h-8 w-8 text-indigo-600" />
+                <div>
+                  <h3 className="font-semibold text-gray-900">Attendance</h3>
+                  <p className="text-gray-600 text-sm">View check-in records</p>
                 </div>
               </div>
             </Link>

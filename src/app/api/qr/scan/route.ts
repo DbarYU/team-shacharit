@@ -12,27 +12,52 @@ export async function POST(request: NextRequest) {
     }
 
     const { qrCode } = await request.json();
-    
     if (!qrCode) {
-      return NextResponse.json({ 
-        success: false, 
-        message: 'QR code is required' 
+      return NextResponse.json({
+        success: false,
+        message: 'QR code is required'
       }, { status: 400 });
+    }
+
+    // Extract the actual code from URL format if needed
+    let actualCode = qrCode;
+    if (qrCode.includes('?code=')) {
+      const url = new URL(qrCode);
+      actualCode = url.searchParams.get('code');
     }
 
     const currentDate = getCurrentDateEST();
 
     // Find the QR code
+    console.log('qrCode:', qrCode);
+    console.log('actualCode:', actualCode);
+    console.log('currentDate:', currentDate);
+
     const qrQuery = await adminDb.collection(COLLECTIONS.QR_CODES)
-      .where('code', '==', qrCode)
+      .where('code', '==', actualCode)
       .where('date', '==', currentDate)
       .where('isActive', '==', true)
       .get();
 
+    console.log('qrQuery.empty:', qrQuery.empty);
+    console.log('qrQuery.docs.length:', qrQuery.docs.length);
+
     if (qrQuery.empty) {
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Invalid or expired QR code' 
+      // Let's also check if the QR code exists at all with a broader query
+      const allQrQuery = await adminDb.collection(COLLECTIONS.QR_CODES)
+        .where('code', '==', actualCode)
+        .get();
+
+      console.log('allQrQuery.docs.length:', allQrQuery.docs.length);
+      if (allQrQuery.docs.length > 0) {
+        const doc = allQrQuery.docs[0];
+        const data = doc.data();
+        console.log('Found QR code with date:', data.date, 'isActive:', data.isActive);
+      }
+
+      return NextResponse.json({
+        success: false,
+        message: 'Invalid or expired QR code'
       }, { status: 400 });
     }
 
