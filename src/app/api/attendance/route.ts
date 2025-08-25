@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
     let query = adminDb.collection(COLLECTIONS.ATTENDANCE);
 
     if (date) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       query = query.where('date', '==', date) as any;
     }
 
