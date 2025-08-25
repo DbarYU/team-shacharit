@@ -2,7 +2,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
 import { COLLECTIONS, DailyOrder } from '@/lib/schemas';
 import { verifyToken } from '@/lib/middleware/auth';
-import { getCurrentDateEST } from '@/lib/utils/dateUtils';
+import { getOrderTargetDateEST, convertFirestoreTimestamp } from '@/lib/utils/dateUtils';
+
+// Helper function to convert Firestore document data
+const convertDocumentData = (doc: any) => {
+  const data = doc.data();
+  // Convert any Firestore timestamps to JavaScript Dates
+  if (data.orderTimestamp) {
+    data.orderTimestamp = convertFirestoreTimestamp(data.orderTimestamp);
+  }
+  return {
+    id: doc.id,
+    ...data
+  };
+};
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,17 +24,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
 
-    const currentDate = getCurrentDateEST();
+    const targetDate = getOrderTargetDateEST();
 
-    // Get all orders for today
+    // Get all orders for tomorrow
     const ordersQuery = await adminDb.collection(COLLECTIONS.DAILY_ORDERS)
-      .where('date', '==', currentDate)
+      .where('date', '==', targetDate)
       .get();
 
-    const orders = ordersQuery.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as DailyOrder[];
+    const orders = ordersQuery.docs.map(convertDocumentData) as DailyOrder[];
 
     // Get user details for each order
     const userIds = [...new Set(orders.map(order => order.userId))];
@@ -41,7 +51,11 @@ export async function GET(request: NextRequest) {
     }));
 
     // Sort by order timestamp
-    enhancedOrders.sort((a, b) => new Date(a.orderTimestamp).getTime() - new Date(b.orderTimestamp).getTime());
+    enhancedOrders.sort((a, b) => {
+      const timeA = convertFirestoreTimestamp(a.orderTimestamp).getTime();
+      const timeB = convertFirestoreTimestamp(b.orderTimestamp).getTime();
+      return timeA - timeB;
+    });
 
     // Create summary
     const summary = {

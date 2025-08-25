@@ -21,7 +21,6 @@ export const DailyOrderSchema = {
   bagelType: 'string', // One of DEFAULT_BAGEL_TYPES
   withPotatoes: 'boolean',
   withCheese: 'boolean',
-  specialRequests: 'string',
   dietaryNotes: 'string',
   orderTimestamp: 'timestamp',
   status: 'string' // One of ORDER_STATUS values
@@ -81,10 +80,10 @@ export const COLLECTIONS = {
   ANALYTICS: 'analytics'
 };
 
-// Default system settings (hardcoded for simplicity)
+// Default system settings
 export const SYSTEM_SETTINGS = {
-  orderDeadlineHour: 21, // 9 PM EST
-  orderDeadlineMinute: 0,
+  orderStartHour: 9, // 9 AM EST
+  orderEndHour: 21, // 9 PM EST
   bagel_types: DEFAULT_BAGEL_TYPES,
   defaultBagelType: 'plain',
   systemTimezone: 'America/New_York'
@@ -109,7 +108,6 @@ export type DailyOrder = {
   bagelType: string;
   withPotatoes: boolean;
   withCheese: boolean;
-  specialRequests: string;
   dietaryNotes: string;
   orderTimestamp: any;
   status: string;

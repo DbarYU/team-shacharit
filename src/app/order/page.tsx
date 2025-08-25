@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { DEFAULT_BAGEL_TYPES, DailyOrder } from '@/lib/schemas';
-import { formatCurrentDateEST } from '@/lib/utils/dateUtils';
+import { getOrderTargetDateEST, areOrdersAllowed } from '@/lib/utils/dateUtils';
 
 export default function OrderPage() {
   const { user } = useAuth();
@@ -15,7 +15,6 @@ export default function OrderPage() {
     bagelType: 'plain',
     withPotatoes: false,
     withCheese: false,
-    specialRequests: '',
     dietaryNotes: ''
   });
   
@@ -53,6 +52,16 @@ export default function OrderPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!user) return;
+
+    // Check if orders are allowed
+    const orderCheck = areOrdersAllowed();
+    if (!orderCheck.allowed) {
+      setError(orderCheck.message || 'Orders are not currently allowed');
+      return;
+    }
+    
     setLoading(true);
     setError('');
 
@@ -61,7 +70,7 @@ export default function OrderPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await user?.getIdToken()}`
+          'Authorization': `Bearer ${await user.getIdToken()}`
         },
         body: JSON.stringify(formData)
       });
@@ -69,7 +78,7 @@ export default function OrderPage() {
       const data = await response.json();
 
       if (data.success) {
-        router.push('/');
+        router.push('/orders');
       } else {
         setError(data.message || 'Failed to create order');
       }
@@ -96,9 +105,7 @@ export default function OrderPage() {
                   <p><strong>Bagel:</strong> {existingOrder.bagelType.replace('_', ' ').toUpperCase()}</p>
                   <p><strong>With Potatoes:</strong> {existingOrder.withPotatoes ? 'Yes' : 'No'}</p>
                   <p><strong>With Cheese:</strong> {existingOrder.withCheese ? 'Yes' : 'No'}</p>
-                  {existingOrder.specialRequests && (
-                    <p><strong>Special Requests:</strong> {existingOrder.specialRequests}</p>
-                  )}
+
                 </div>
               </div>
 
@@ -124,7 +131,7 @@ export default function OrderPage() {
               🥯 Place Your Order
             </h1>
             <p className="text-gray-600 text-center mb-6">
-              For {formatCurrentDateEST('EEEE, MMMM d, yyyy')}
+              For tomorrow: {getOrderTargetDateEST('EEEE, MMMM d, yyyy')}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -172,19 +179,7 @@ export default function OrderPage() {
                 </label>
               </div>
 
-              {/* Special Requests */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Special Requests
-                </label>
-                <textarea
-                  value={formData.specialRequests}
-                  onChange={(e) => setFormData({ ...formData, specialRequests: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  rows={3}
-                  placeholder="Any special requests or modifications..."
-                />
-              </div>
+
 
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-md p-3 text-red-700 text-sm">

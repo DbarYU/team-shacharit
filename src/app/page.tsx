@@ -4,12 +4,13 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { formatCurrentDateEST } from '@/lib/utils/dateUtils';
+import { getOrderTargetDateEST } from '@/lib/utils/dateUtils';
 import { Clock, QrCode, Users, Coffee } from 'lucide-react';
+import { DailyOrder } from '@/lib/schemas';
 
 export default function HomePage() {
   const { userProfile, user } = useAuth();
-  const [currentOrder, setCurrentOrder] = useState(null);
+  const [currentOrder, setCurrentOrder] = useState<DailyOrder | null>(null);
 
   const fetchCurrentOrder = useCallback(async () => {
     try {
@@ -46,7 +47,7 @@ export default function HomePage() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">🥯 Team Shacharit</h1>
-            <p className="text-xl text-gray-600">Breakfast Orders for {formatCurrentDateEST('EEEE, MMMM d, yyyy')}</p>
+            <p className="text-xl text-gray-600">Breakfast Orders for {getOrderTargetDateEST('EEEE, MMMM d, yyyy')}</p>
           </div>
 
           {/* Welcome Section */}
@@ -57,19 +58,17 @@ export default function HomePage() {
             
             {currentOrder ? (
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h3 className="font-medium text-green-800 mb-2">✅ Your order is confirmed!</h3>
+                <h3 className="font-medium text-green-800 mb-2">✅ Your order is confirmed for tomorrow!</h3>
                 <div className="text-green-700">
                   <p><strong>Bagel:</strong> {currentOrder.bagelType.replace('_', ' ').toUpperCase()}</p>
                   <p><strong>With Potatoes:</strong> {currentOrder.withPotatoes ? 'Yes' : 'No'}</p>
                   <p><strong>With Cheese:</strong> {currentOrder.withCheese ? 'Yes' : 'No'}</p>
-                  {currentOrder.specialRequests && (
-                    <p><strong>Special Requests:</strong> {currentOrder.specialRequests}</p>
-                  )}
+
                 </div>
               </div>
             ) : (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <h3 className="font-medium text-yellow-800 mb-2">⏰ You haven&apos;t ordered yet today</h3>
+                <h3 className="font-medium text-yellow-800 mb-2">⏰ You haven&apos;t ordered yet for tomorrow</h3>
                 <p className="text-yellow-700">Order deadline: 9:00 PM EST</p>
               </div>
             )}
@@ -121,28 +120,7 @@ export default function HomePage() {
             )}
           </div>
 
-          {/* System Info */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">🎯 Simplified System</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-              <div className="flex items-center space-x-2">
-                <Clock className="h-4 w-4" />
-                <span>Order deadline: 9 PM EST daily</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Users className="h-4 w-4" />
-                <span>Community access - no roles needed</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <QrCode className="h-4 w-4" />
-                <span>QR codes for attendance tracking</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Coffee className="h-4 w-4" />
-                <span>Fresh bagels every morning</span>
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     </ProtectedRoute>

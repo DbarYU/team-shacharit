@@ -82,12 +82,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-600">
-          <p>Welcome to the simplified breakfast ordering system</p>
-          <p className="text-xs mt-2">• Order by 9 PM EST daily</p>
-          <p className="text-xs">• Scan QR codes for check-in</p>
-          <p className="text-xs">• See everyone&apos;s orders</p>
-        </div>
+
       </div>
     </div>
   );
