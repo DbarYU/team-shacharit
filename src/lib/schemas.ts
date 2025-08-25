@@ -70,13 +70,10 @@ export const ORDER_STATUS = {
 
 export const DEFAULT_BAGEL_TYPES = [
   'plain',
-  'everything', 
   'sesame',
-  'poppy_seed',
-  'whole_wheat',
-  'onion',
-  'garlic',
-  'cinnamon_raisin'
+  'everything',
+  'wrap',
+  'no_bagel'
 ];
 
 export const COLLECTIONS = {
