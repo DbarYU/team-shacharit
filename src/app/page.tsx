@@ -88,7 +88,7 @@ export default function HomePage() {
                 }>
                   <p><strong>Bagel:</strong> {currentOrder.bagelType.replace('_', ' ').toUpperCase()}</p>
                   <p><strong>With Potatoes:</strong> {currentOrder.withPotatoes ? 'Yes' : 'No'}</p>
-                  <p><strong>With Cheese:</strong> {currentOrder.withCheese ? 'Yes' : 'No'}</p>
+                  <p><strong>Cheese:</strong> {currentOrder.cheeseType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
                 </div>
               </div>
             ) : (

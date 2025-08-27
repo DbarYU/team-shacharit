@@ -299,8 +299,8 @@ export default function OrdersPage() {
                       
                       <div>
                         <span className="font-medium text-gray-700">Cheese:</span>
-                        <p className={order.withCheese ? 'text-green-600' : 'text-gray-500'}>
-                          {order.withCheese ? 'Yes' : 'No'}
+                        <p className={order.cheeseType === 'no_cheese' ? 'text-gray-500' : 'text-green-600'}>
+                          {order.cheeseType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                         </p>
                       </div>
                       

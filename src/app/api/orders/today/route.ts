@@ -67,7 +67,11 @@ export async function GET(request: NextRequest) {
       totalOrders: enhancedOrders.length,
       bagelBreakdown: {} as Record<string, number>,
       withPotatoes: 0,
-      withCheese: 0
+      cheeseBreakdown: {
+        no_cheese: 0,
+        grilled_cheese: 0,
+        cream_cheese: 0
+      } as Record<string, number>
     };
 
     enhancedOrders.forEach(order => {
@@ -76,7 +80,9 @@ export async function GET(request: NextRequest) {
       
       // Count add-ons
       if (order.withPotatoes) summary.withPotatoes++;
-      if (order.withCheese) summary.withCheese++;
+      if (order.cheeseType) {
+        summary.cheeseBreakdown[order.cheeseType] = (summary.cheeseBreakdown[order.cheeseType] || 0) + 1;
+      }
     });
 
     return NextResponse.json({

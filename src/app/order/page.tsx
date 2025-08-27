@@ -104,7 +104,7 @@ export default function OrderPage() {
                 <div className="space-y-2 text-green-700">
                   <p><strong>Bagel:</strong> {existingOrder.bagelType.replace('_', ' ').toUpperCase()}</p>
                   <p><strong>With Potatoes:</strong> {existingOrder.withPotatoes ? 'Yes' : 'No'}</p>
-                  <p><strong>With Cheese:</strong> {existingOrder.withCheese ? 'Yes' : 'No'}</p>
+                  <p><strong>Cheese:</strong> {existingOrder.cheeseType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
 
                 </div>
               </div>
