@@ -81,20 +81,28 @@ export default function HomePage() {
                     {currentOrder.status.toUpperCase()}
                   </span>
                 </div>
-                <div className={
-                  currentOrder.status === 'confirmed'
-                    ? 'text-green-700'
-                    : 'text-yellow-700'
-                }>
-                  <p><strong>Bagel:</strong> {currentOrder.bagelType.replace('_', ' ').toUpperCase()}</p>
-                  <p><strong>With Potatoes:</strong> {currentOrder.withPotatoes ? 'Yes' : 'No'}</p>
-                  <p><strong>Cheese:</strong> {currentOrder.cheeseType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
+                <div className="text-gray-900 space-y-1">
+                  <p>
+                    <span className="font-semibold">Bagel:</span>
+                    {' '}
+                    <span className="font-bold">{currentOrder.bagelType.replace('_', ' ').toUpperCase()}</span>
+                  </p>
+                  <p>
+                    <span className="font-semibold">With Potatoes:</span>
+                    {' '}
+                    <span className="font-bold">{currentOrder.withPotatoes ? 'Yes' : 'No'}</span>
+                  </p>
+                  <p>
+                    <span className="font-semibold">Cheese:</span>
+                    {' '}
+                    <span className="font-bold">{currentOrder.cheeseType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                  </p>
                 </div>
               </div>
             ) : (
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <h3 className="font-medium text-yellow-800 mb-2">⏰ You haven&apos;t ordered yet for tomorrow</h3>
-                <p className="text-yellow-700">Order deadline: 9:00 PM EST</p>
+                <p className="text-yellow-700">Orders can be placed anytime; orders placed today are for tomorrow (EST)</p>
               </div>
             )}
           </div>

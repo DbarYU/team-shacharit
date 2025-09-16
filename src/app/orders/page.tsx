@@ -282,24 +282,24 @@ export default function OrdersPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-gray-900">
                       <div>
-                        <span className="font-medium text-gray-700">Bagel:</span>
-                        <p className="text-gray-900">
+                        <span className="font-semibold">Bagel:</span>
+                        <p className="font-bold">
                           {order.bagelType.replace('_', ' ').toUpperCase()}
                         </p>
                       </div>
                       
                       <div>
-                        <span className="font-medium text-gray-700">Potatoes:</span>
-                        <p className={order.withPotatoes ? 'text-green-600' : 'text-gray-500'}>
+                        <span className="font-semibold">Potatoes:</span>
+                        <p className="font-bold">
                           {order.withPotatoes ? 'Yes' : 'No'}
                         </p>
                       </div>
                       
                       <div>
-                        <span className="font-medium text-gray-700">Cheese:</span>
-                        <p className={order.cheeseType === 'no_cheese' ? 'text-gray-500' : 'text-green-600'}>
+                        <span className="font-semibold">Cheese:</span>
+                        <p className="font-bold">
                           {order.cheeseType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                         </p>
                       </div>

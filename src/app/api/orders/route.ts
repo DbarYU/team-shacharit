@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    // Check if orders are currently allowed (9 AM to 9 PM EST)
+    // Check if orders are currently allowed (24/7; target date is always tomorrow EST)
     const orderCheck = areOrdersAllowed();
     if (!orderCheck.allowed) {
       return NextResponse.json({ 

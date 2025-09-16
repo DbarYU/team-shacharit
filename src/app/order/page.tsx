@@ -101,11 +101,19 @@ export default function OrderPage() {
               
               <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
                 <h2 className="font-semibold text-green-800 mb-4">Your order for today:</h2>
-                <div className="space-y-2 text-green-700">
-                  <p><strong>Bagel:</strong> {existingOrder.bagelType.replace('_', ' ').toUpperCase()}</p>
-                  <p><strong>With Potatoes:</strong> {existingOrder.withPotatoes ? 'Yes' : 'No'}</p>
-                  <p><strong>Cheese:</strong> {existingOrder.cheeseType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
-
+                <div className="space-y-2 text-gray-900">
+                  <p>
+                    <span className="font-semibold">Bagel:</span>{' '}
+                    <span className="font-bold">{existingOrder.bagelType.replace('_', ' ').toUpperCase()}</span>
+                  </p>
+                  <p>
+                    <span className="font-semibold">With Potatoes:</span>{' '}
+                    <span className="font-bold">{existingOrder.withPotatoes ? 'Yes' : 'No'}</span>
+                  </p>
+                  <p>
+                    <span className="font-semibold">Cheese:</span>{' '}
+                    <span className="font-bold">{existingOrder.cheeseType.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                  </p>
                 </div>
               </div>
 
@@ -143,11 +151,11 @@ export default function OrderPage() {
                 <select
                   value={formData.bagelType}
                   onChange={(e) => setFormData({ ...formData, bagelType: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-semibold bg-white"
                   required
                 >
                   {DEFAULT_BAGEL_TYPES.map(type => (
-                    <option key={type} value={type}>
+                    <option key={type} value={type} className="text-gray-900">
                       {type.replace('_', ' ').toUpperCase()}
                     </option>
                   ))}
@@ -175,10 +183,10 @@ export default function OrderPage() {
                   <select
                     value={formData.cheeseType}
                     onChange={(e) => setFormData({ ...formData, cheeseType: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-semibold bg-white"
                   >
                     {CHEESE_OPTIONS.map(option => (
-                      <option key={option} value={option}>
+                      <option key={option} value={option} className="text-gray-900">
                         {option.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                       </option>
                     ))}
