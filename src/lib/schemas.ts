@@ -92,8 +92,8 @@ export const COLLECTIONS = {
 
 // Default system settings
 export const SYSTEM_SETTINGS = {
-  orderStartHour: 9, // 9 AM EST
-  orderEndHour: 21, // 9 PM EST
+  orderStartHour: 0, // 12 AM EST
+  orderEndHour: 24, // 12 AM next day (24/7)
   bagel_types: DEFAULT_BAGEL_TYPES,
   defaultBagelType: 'plain',
   systemTimezone: 'America/New_York'

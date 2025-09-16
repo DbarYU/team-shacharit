@@ -93,7 +93,9 @@ export const formatCurrentDateEST = (formatStr: string): string => {
   return getCurrentDateEST(formatStr);
 };
 
-// Get the target date for orders (next day)
+// Get the target date for orders.
+// Policy: Orders placed before 00:00 EST are for the next day; orders at or after 00:00 are for the same day's next day as well (always tomorrow).
+// Effectively, always return tomorrow's date in EST.
 export const getOrderTargetDateEST = (formatStr: string = 'yyyy-MM-dd'): string => {
   const now = new Date();
   const zonedDate = toZonedTime(now, EST_TIMEZONE);
@@ -101,25 +103,7 @@ export const getOrderTargetDateEST = (formatStr: string = 'yyyy-MM-dd'): string 
   return format(nextDay, formatStr);
 };
 
-// Check if orders are currently allowed (9 AM to 9 PM EST)
+// Orders are allowed 24/7 with a midnight cutoff determining the target date (always tomorrow).
 export const areOrdersAllowed = (): { allowed: boolean; message?: string } => {
-  const now = new Date();
-  const estTime = toZonedTime(now, EST_TIMEZONE);
-  const currentHour = estTime.getHours();
-  
-  if (currentHour < 9) {
-    return {
-      allowed: false,
-      message: 'Orders are only accepted between 9 AM and 9 PM EST'
-    };
-  }
-  
-  if (currentHour >= 21) {
-    return {
-      allowed: false,
-      message: 'Orders are only accepted between 9 AM and 9 PM EST'
-    };
-  }
-  
   return { allowed: true };
 };

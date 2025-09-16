@@ -214,7 +214,7 @@ export default function OrderPage() {
             </form>
 
             <div className="mt-6 text-center text-sm text-gray-600">
-              <p>⏰ Orders must be placed by 9:00 PM EST</p>
+              <p>⏰ Orders can be placed anytime; orders placed today are for tomorrow (EST)</p>
             </div>
           </div>
         </div>
